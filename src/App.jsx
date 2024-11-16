@@ -72,7 +72,8 @@ function App() {
   return (
     <div className="bg-zinc-100 p-10 w-full h-full relative overflow-x-hidden">
       {box && (
-        <div className="box w-44 h-32 p-2 mx-auto fixed flex flex-col gap-3 items-center justify-center left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] bg-emerald-700 rounded-lg">
+        <div style={{
+          boxShadow: "0px 0px 77px 6px rgba(5,150,105,0.9)"}} className="box w-44 h-32 p-2 mx-auto fixed flex flex-col gap-3 items-center justify-center left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] bg-emerald-700 rounded-lg">
           <h1 className="text-center">are you sure you want to cancel it</h1>
           <div className="flex items-center gap-3">
             {" "}
