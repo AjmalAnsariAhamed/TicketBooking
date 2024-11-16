@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import './App.css'
 
 function App() {
   const [bookedSeats, setBookedSeats] = useState({})
@@ -12,7 +11,19 @@ function App() {
   ];
 
   return (
-    <div className=''>
+    <div className='bg-zinc-100 p-10'>
+      <h1>you can book only 5 tickets out of all sections</h1>
+      {sectionsData.map((section,id)=>(
+        <div key={id}className='wrapper min-w-[40%] max-w-[60%] mx-auto flex flex-col gap-10 '>
+          <h1 className='text-3xl text-center font-semibold mt-10'>this is {section.name}</h1>
+          {[...Array(section.rows)].map((row,row_index)=>(
+            <div key={row_index} className="rows flex items-center justify-between gap-5"> {[...Array(section.seatsPerRow)].map((und,seat_index)=>(
+              <div className={`seats h-14 w-14 bg-emerald-600 rounded-md`}></div>
+            ))}</div>
+          ))}
+        </div>
+
+      ))}
       
 
     </div>
