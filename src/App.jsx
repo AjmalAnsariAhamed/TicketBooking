@@ -4,7 +4,11 @@ import viteLogo from "/vite.svg";
 
 function App() {
   const [bookedSeats, setBookedSeats] = useState([]);
-  const [cancel, setCancel] = useState(false);
+  const [price, setPrice] = useState(0);
+  const [cancelSeatNum,setCancelSeatNum]=useState(null)
+
+  const [toggleCancel, settoggleCancel] = useState(false);
+  // this is for confimration
   const [box, setBox] = useState(false);
   const sectionsData = [
     { name: "VIP", rows: 5, seatsPerRow: 5 },
@@ -15,36 +19,55 @@ function App() {
   const frBooking = (name, row, seat_index) => {
     const data = `name:${name},row:${row},seat_index:${seat_index}`;
     console.log(data, "it is data bariable");
-    if (bookedSeats.length > 5) {
+    if (bookedSeats.length >= 5 && !(isBooked(name, row, seat_index))) {
       alert("you have booked all seats");
       return;
     }
     if (isBooked(name, row, seat_index)) {
       setBox(!box);
-      frCancel(data)
-     
-      
+      setCancelSeatNum(data)
+      frCancel(data);
     } else {
       setBookedSeats([...bookedSeats, data]);
-      
     }
   };
-  const frCancel =(data)=>{
-   if (cancel){
-    setBookedSeats(prev=> prev.filter(data=> data!==data))
-    setCancel(prev=>!prev)
-   }
-  }
+  const frCancel = (data) => {
+    
+    if (toggleCancel) {
+      setBookedSeats((prev) => prev.filter((section) => section!==data));
+      console.log(data,"haha")
+      settoggleCancel((prev) => !prev);
+    }
+  };
+   useEffect(() => {
+    frCancel(cancelSeatNum)
+   }, [toggleCancel]);
   useEffect(()=>{
-    frCancel()
-  },[cancel])
+    calculatePrice()
+  },[bookedSeats])
+  const calculatePrice = () => {
+    const sections = { VIP: 550, General: 350, Economy: 120 };
+   let totalPrices=0
+    
+    bookedSeats.forEach(data => {
+      if (data.includes("VIP")) {
+       totalPrices+=sections["VIP"] 
+      } else if (data.includes("General")) {
+        totalPrices+=sections["General"] 
+      } else if (data.includes("Economy")) {
+        totalPrices+=sections["Economy"] 
+      }
+    });
+    setPrice(totalPrices)
+    //lets say vip is 550, economy 300, general is 120
+     
+  };
+  
   const isBooked = (name, row, seat) => {
     const data = `name:${name},row:${row},seat_index:${seat}`;
     return bookedSeats.includes(data);
   };
-  const total=()=>{
-    
-  }
+  const total = () => {};
 
   return (
     <div className="bg-zinc-100 p-10 w-full h-full relative overflow-x-hidden">
@@ -53,19 +76,22 @@ function App() {
           <h1 className="text-center">are you sure you want to cancel it</h1>
           <div className="flex items-center gap-3">
             {" "}
-            <button onClick={()=> setBox(!box)} className="bg-zinc-700 text-emerald-600 rounded-sm font-semibold px-2 py-1">
-              back
-            </button>{" "}
             <button
               onClick={() => {
-                setCancel(!cancel);
+                settoggleCancel(!toggleCancel);
                 setBox(!box);
-              
               }}
               className="bg-zinc-700 text-emerald-600 rounded-sm font-semibold px-2 py-1"
             >
-              cancel
+              yes
             </button>
+            <button
+              onClick={() => setBox(!box)}
+              className="bg-zinc-700 text-emerald-600 rounded-sm font-semibold px-2 py-1"
+            >
+              back
+            </button>{" "}
+           
           </div>
         </div>
       )}
@@ -102,6 +128,7 @@ function App() {
           ))}
         </div>
       ))}
+      {price}
     </div>
   );
 }
