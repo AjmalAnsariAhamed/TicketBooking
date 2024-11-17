@@ -3,6 +3,7 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 
 function App() {
+  const [globaBookedSeats,setGlobalBookedSeats]=useState(["name:VIP,row:4,seat_index:3","name:VIP,row:2,seat_index:3","name:General,row:4,seat_index:3","name:VIP,row:1,seat_index:5","name:VIP,row:1,seat_index:2","name:Economy,row:1,seat_index:1","name:Economy,row:1,seat_index:2","name:Economy,row:1,seat_index:4","name:Economy,row:1,seat_index:8"])
   const [bookedSeats, setBookedSeats] = useState([]);
   const [price, setPrice] = useState(0);
   const [cancelSeatNum,setCancelSeatNum]=useState(null)
@@ -113,7 +114,9 @@ function App() {
             >
               {" "}
               {[...Array(section.seatsPerRow)].map((und, seat_index) => (
-                <div
+                globaBookedSeats.includes(`name:${section.name},row:${row_index+1},seat_index:${seat_index+1}`)?
+                <div onClick={()=> alert("this slot is booked by other")} key={seat_index} className="seats h-14 w-14 rounded-md bg-zinc-600"></div>
+                :<div
                   onClick={() =>
                     frBooking(section.name, row_index + 1, seat_index + 1)
                   }
